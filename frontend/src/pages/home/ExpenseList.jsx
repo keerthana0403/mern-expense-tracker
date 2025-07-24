@@ -1,28 +1,10 @@
 import React from "react";
 
-const records = [
-  {
-    title: "Job",
-    amount: "50000",
-    type: "income",
-    category: "Salary",
-    paymentMethod: "UPI",
-    date: "2025-07-16",
-  },
-  {
-    title: "Rent",
-    amount: "8000",
-    type: "expense",
-    category: "Rent",
-    paymentMethod: "UPI",
-    date: "2025-07-16",
-  },
-];
-
-const ExpenseList = () => {
+const ExpenseList = ({ records }) => {
   return (
-    <div className="mt-3 space-y-4 mb-5">
+    <div className="mt-3 space-y-4 mb-5 px-4">
       <p className="text-base-content/70">Your Recent Transactions</p>
+      {/* you have 2 incomes and 23 expenses this month */}
       {records.map((record) => (
         <div key={record._id} className="card shadow-sm bg-base-200">
           <div className="card-body p-2 flex flex-row items-center justify-center">
@@ -52,7 +34,9 @@ const ExpenseList = () => {
             {/* Amount & Date */}
             <div className="w-full mb-2 ">
               <p className="font-semibold text-base-content">{record.amount}</p>
-              <p className="text-xs text-base-content/60">{record.date}</p>
+              <p className="text-xs text-base-content/60">
+                {new Date(record?.date).toLocaleDateString()}
+              </p>
             </div>
           </div>
         </div>

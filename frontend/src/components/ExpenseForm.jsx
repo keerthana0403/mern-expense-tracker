@@ -1,88 +1,162 @@
-import React from "react";
 import Input from "./Input";
 import Button from "./Button";
+import { categories } from "../constants/categories";
+import { useEffect, useState } from "react";
+import useAddExpense from "../hooks/useAddExpense.js";
+import useExpenseRecords from "../zustand/useExpenseRecords.js";
+import useUpdateExpense from "../hooks/useUpdateExpense.js";
 
-const ExpenseForm = () => {
+const ExpenseForm = ({ setShowModal, edit }) => {
+  const [inputs, setInputs] = useState({
+    title: "",
+    amount: "",
+    type: "",
+    category: "",
+    paymentMethod: "",
+    date: "",
+  });
+
+  const { loading, addExpenseRecord } = useAddExpense();
+  const { recordToUpdate, setRecordToUpdate } = useExpenseRecords();
+  const { loading: editLoading, updateExpenseRecord } = useUpdateExpense();
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setInputs({ ...inputs, [name]: value });
+  };
+
+  const filteredCategories = categories.filter((c) => c.type === inputs.type);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (edit) await updateExpenseRecord(recordToUpdate?._id, inputs);
+    else await addExpenseRecord(inputs);
+  };
+
+  useEffect(() => {
+    if (edit && recordToUpdate) {
+      setInputs({
+        title: recordToUpdate.title || "",
+        amount: recordToUpdate.amount || "",
+        type: recordToUpdate.type || "",
+        category: recordToUpdate.category || "",
+        paymentMethod: recordToUpdate.paymentMethod || "",
+        date: recordToUpdate.date?.split("T")[0] || "",
+      });
+    } else {
+      setInputs({
+        title: "",
+        amount: "",
+        type: "",
+        category: "",
+        paymentMethod: "",
+        date: "",
+      });
+    }
+  }, [recordToUpdate, edit]);
+
   return (
-    <form className="space-y-4 max-w-sm mb-4">
-      {/* Date */}
-      <div className="form-control">
-        <label className="label font-semibold text-base-content/70 mb-2">
-          <span className="label-text">Date</span>
-        </label>
-        <Input type="date" placeholder={"Date"} name={"date"} />
+    <dialog id="add_modal" className="modal modal-open">
+      <div className="modal-box">
+        <h3 className="font-bold text-lg"> Add Transaction</h3>
+        <form className="py-4 flex flex-col gap-3">
+          <select
+            className="select select-bordered w-full"
+            name="type"
+            value={inputs.type}
+            onChange={handleInputChange}
+          >
+            <option value="">Select</option>
+            <option value="expense">Expense</option>
+            <option value="income">Income</option>
+          </select>
+          <input
+            type="text"
+            placeholder="Title"
+            className="input input-bordered w-full"
+            name="title"
+            value={inputs.title}
+            onChange={handleInputChange}
+          />
+          <input
+            type="number"
+            placeholder="Amount"
+            className="input input-bordered w-full"
+            name="amount"
+            value={inputs.amount}
+            onChange={handleInputChange}
+          />
+          <select
+            className="select select-bordered w-full"
+            name="category"
+            value={inputs.category}
+            onChange={handleInputChange}
+            disabled={!inputs.type}
+          >
+            <option value="">Select</option>
+
+            {filteredCategories.map((opt) => (
+              <option value={opt.name} key={opt.name}>
+                {opt.icon} {opt.name}
+              </option>
+            ))}
+          </select>
+          <select
+            className="select select-bordered w-full"
+            name="paymentMethod"
+            value={inputs.paymentMethod}
+            onChange={handleInputChange}
+          >
+            <option value="">Select</option>
+            <option value="cash">Cash</option>
+            <option value="credit card">Credit Card</option>
+            <option value="debit card">Debit Card</option>
+            <option value="UPI">UPI</option>
+            <option value="online">Online</option>
+            <option value="others">Others</option>
+          </select>
+          <input
+            type="date"
+            className="input input-bordered w-full"
+            name="date"
+            value={inputs.date}
+            onChange={handleInputChange}
+          />
+
+          <div className="modal-action">
+            <button
+              type="button"
+              onClick={() => {
+                setShowModal(false);
+                setRecordToUpdate(null);
+              }}
+              className="btn"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="btn btn-primary"
+              onClick={handleSubmit}
+              disabled={loading || editLoading}
+            >
+              {" "}
+              {edit ? (
+                !editLoading ? (
+                  "Edit"
+                ) : (
+                  <span className="loading loading-spinner"></span>
+                )
+              ) : !loading ? (
+                "Add"
+              ) : (
+                <span className="loading loading-spinner"></span>
+              )}
+            </button>
+          </div>
+        </form>
       </div>
-
-      {/* Income or Expense */}
-      <div className="form-control">
-        <label className="label font-semibold text-base-content/70 mb-2">
-          <span className="label-text">Expense or Income</span>
-        </label>
-        <select className="select select-bordered w-full">
-          <option value="">Select</option>
-          <option value="expense">Expense</option>
-          <option value="income">Income</option>
-        </select>
-      </div>
-
-      {/* Category */}
-      <div className="form-control">
-        <label className="label font-semibold text-base-content/70 mb-2">
-          <span className="label-text">Category</span>
-        </label>
-
-        <select className="select select-bordered w-full">
-          <option value="">Select</option>
-          <option value="salary">Salary</option>
-          <option value="freelancing">Freelancing</option>
-          <option value="gifts">Gifts</option>
-          <option value="food">Food</option>
-          <option value="entertainment">Entertainment</option>
-          <option value="rent">Rent</option>
-          <option value="others">Others</option>
-        </select>
-      </div>
-
-      {/* Amount */}
-      <div className="form-control">
-        <label className="label font-semibold text-base-content/70 mb-2">
-          <span className="label-text">Amount</span>
-        </label>
-
-        <Input
-          type="number"
-          step="0.01"
-          name="amount"
-          //   onBlur={(e) => {
-          //     const value = parseFloat(e.target.value).toFixed(2);
-          //   }}
-        />
-      </div>
-
-      {/* Payment Method */}
-      <div className="form-control">
-        <label className="label font-semibold text-base-content/70 mb-2">
-          <span className="label-text">Payment Method</span>
-        </label>
-
-        <select className="select select-bordered w-full">
-          <option value="">Select</option>
-          <option value="cash">Cash</option>
-          <option value="credit card">Credit Card</option>
-          <option value="debit card">Debit Card</option>
-          <option value="UPI">UPI</option>
-          <option value="online">Online</option>
-          <option value="others">Others</option>
-        </select>
-      </div>
-
-      {/* Submit Button */}
-      <Button
-        type="submit"
-        className="btn btn-success w-full"
-        children={"Add Record"}
-      />
-    </form>
+    </dialog>
   );
 };
 

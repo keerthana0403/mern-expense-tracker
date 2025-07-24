@@ -1,0 +1,21 @@
+export const categories = [
+  { type: "expense", name: "Food & Dining", icon: "🍔" },
+  { type: "expense", name: "Rent", icon: "🏠" },
+  { type: "expense", name: "Utilities", icon: "💡" },
+  { type: "expense", name: "Transportation", icon: "🚗" },
+  { type: "expense", name: "Entertainment", icon: "🎬" },
+  { type: "expense", name: "Subscriptions", icon: "📱" },
+  { type: "expense", name: "Shopping", icon: "🛍️" },
+  { type: "expense", name: "Health", icon: "🏥" },
+  { type: "expense", name: "Education", icon: "📚" },
+  { type: "expense", name: "Travel", icon: "✈️" },
+  { type: "expense", name: "Personal Care", icon: "💅" },
+  { type: "expense", name: "Miscellaneous", icon: "🔧" },
+
+  { type: "income", name: "Salary", icon: "💼" },
+  { type: "income", name: "Freelancing", icon: "🧑‍💻" },
+  { type: "income", name: "Business", icon: "🏢" },
+  { type: "income", name: "Investments", icon: "📈" },
+  { type: "income", name: "Gifts", icon: "🎁" },
+  { type: "income", name: "Other Income", icon: "🪙" },
+];

@@ -1,47 +1,24 @@
+import { useNavigate } from "react-router-dom";
 import Input from "../../components/Input";
 import TransactionList from "./TransactionList";
 import { ArrowLeftCircle } from "lucide-react";
-
-const transactions = [
-  {
-    _id: "1",
-    type: "income",
-    category: "Salary",
-    amount: 45000,
-    paymentMethod: "Bank Transfer",
-    date: "2025-07-10",
-  },
-  {
-    _id: "2",
-    type: "expense",
-    category: "Groceries",
-    amount: 2500,
-    paymentMethod: "Credit Card",
-    date: "2025-07-12",
-  },
-  {
-    _id: "3",
-    type: "expense",
-    category: "Internet",
-    amount: 1000,
-    paymentMethod: "UPI",
-    date: "2025-07-14",
-  },
-  {
-    _id: "4",
-    type: "income",
-    category: "Freelance",
-    amount: 12000,
-    paymentMethod: "UPI",
-    date: "2024-06-15",
-  },
-];
+import useGetExpenses from "../../hooks/useGetExpenses";
+import { useState } from "react";
+import ExpenseForm from "../../components/ExpenseForm";
 
 const TransactionPage = () => {
+  const navigate = useNavigate();
+
+  const { expenses, loading } = useGetExpenses();
+
+  const [showModal, setShowModal] = useState(false);
+
   return (
-    <div className="min-h-screen overflow-auto">
+    <div className="max-h-screen">
       <div className="navbar bg-base-100 shadow-md flex gap-5 items-center mb-5">
-        <ArrowLeftCircle />
+        <button onClick={() => navigate(-1)}>
+          <ArrowLeftCircle />
+        </button>
         <h2 className="text-2xl font-bold">Transaction History</h2>
       </div>
 
@@ -56,7 +33,12 @@ const TransactionPage = () => {
         />
       </div>
 
-      <TransactionList transactions={transactions} />
+      {loading ? (
+        <span className="loading loading-spinner"></span>
+      ) : (
+        <TransactionList transactions={expenses} setShowModal={setShowModal} />
+      )}
+      {showModal && <ExpenseForm setShowModal={setShowModal} edit={true} />}
     </div>
   );
 };

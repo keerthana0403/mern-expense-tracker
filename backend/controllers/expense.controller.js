@@ -4,7 +4,7 @@ export const fetchRecords = async (req, res) => {
   try {
     const userId = req.user._id;
 
-    const userRecords = await Expense.find({ userId }).sort({ date: -1 });
+    const userRecords = await Expense.find({ userId }).sort({ createdAt: -1 });
 
     if (!userRecords || userRecords.length === 0) {
       return res.status(200).json([]);
@@ -20,7 +20,7 @@ export const addRecord = async (req, res) => {
   try {
     const userId = req.user._id;
 
-    const { title, amount, type, category, date } = req.body;
+    const { title, amount, type, category, date, paymentMethod } = req.body;
 
     const newExpense = new Expense({
       userId,
@@ -28,6 +28,7 @@ export const addRecord = async (req, res) => {
       amount,
       type,
       category,
+      paymentMethod,
       date,
     });
 
@@ -53,9 +54,9 @@ export const updateRecord = async (req, res) => {
           title: updatedData.title,
           amount: updatedData.amount,
           type: updatedData.type,
-          category: updatedData.type,
+          category: updatedData.category,
           paymentMethod: updatedData.paymentMethod,
-          data: updatedData.date,
+          date: updatedData.date,
         },
       },
       { new: true }
@@ -65,7 +66,7 @@ export const updateRecord = async (req, res) => {
       res.status(404).json({ error: "Record not found" });
     }
 
-    return res.status(200).json({ userRecord });
+    return res.status(200).json(userRecord);
   } catch (error) {
     console.log("Error in updateRecord", error.message);
     res.status(500).json({ error: "internal server error" });
@@ -85,7 +86,7 @@ export const deleteRecord = async (req, res) => {
 
     await record.deleteOne();
 
-    res.status(200).json({ message: "record deleted" });
+    res.status(200).json(record);
   } catch (error) {
     console.log("Error in deleteRecord", error.message);
     res.status(500).json({ error: "internal server error" });
