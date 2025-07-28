@@ -1,11 +1,11 @@
 import React from "react";
 
 const Button = ({
+  children,
   type = "button",
   onClick,
-  disabled,
-  children,
   className = "",
+  disabled = false,
 }) => {
   return (
     <button

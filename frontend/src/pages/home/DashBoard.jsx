@@ -1,33 +1,42 @@
 import React from "react";
+import Button from "../../components/Button";
 
 const DashBoard = ({ setShowModal, income, expense, balance }) => {
   return (
     <>
-      <div className="flex justify-end p-3">
-        <button
+      <div className="flex justify-end p-3 ">
+        <Button
           onClick={() => setShowModal(true)}
-          className="btn btn-primary btn-sm"
-        >
-          Add Transaction
-        </button>
+          className="btn btn-accent btn-sm"
+          children={"Add Transaction"}
+        />
       </div>
       <div className="p-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="card bg-green-100 text-green-900 shadow">
+        <div
+          className="card text-white shadow"
+          style={{ backgroundColor: "#2F5249" }}
+        >
           <div className="card-body">
             <h2 className="card-title">💰 Income</h2>
-            <p>₹{income}</p>
+            <p>₹{income.toLocaleString("en-IN")}</p>
           </div>
         </div>
-        <div className="card bg-red-100 text-red-900 shadow">
+        <div
+          className="card text-emerald-950 shadow"
+          style={{ backgroundColor: "#E3DE61" }}
+        >
           <div className="card-body">
             <h2 className="card-title">💸 Expenses</h2>
-            <p>₹{expense}</p>
+            <p>₹{expense.toLocaleString("en-IN")}</p>
           </div>
         </div>
-        <div className="card bg-blue-100 text-blue-900 shadow">
+        <div
+          className="card  text-white shadow"
+          style={{ backgroundColor: "#437057" }}
+        >
           <div className="card-body">
             <h2 className="card-title">🧾 Balance</h2>
-            <p>₹{balance}</p>
+            <p>₹{balance.toLocaleString("en-IN")}</p>
           </div>
         </div>
       </div>

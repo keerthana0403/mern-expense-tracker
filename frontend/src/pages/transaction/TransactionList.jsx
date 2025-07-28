@@ -14,8 +14,8 @@ const TransactionList = ({ transactions, setShowModal }) => {
     await deleteExpenseRecord(tx?._id);
   };
   return (
-    <div className="overflow-x-auto w-full">
-      <table className="table table-zebra">
+    <div className="w-full overflow-x-auto">
+      <table className="table table-zebra ">
         <thead className="bg-base-200 text-base-content">
           <tr>
             <th>Type</th>

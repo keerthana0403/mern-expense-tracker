@@ -30,7 +30,7 @@ const SignUp = () => {
         </p>
 
         {/* Google Sign-In Button */}
-        <GButton text={"Sign up with Google"} />
+        <GButton />
 
         {/* Divider */}
         <div className="divider text-sm text-base-content/50">or</div>

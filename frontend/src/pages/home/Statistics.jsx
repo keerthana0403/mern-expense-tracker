@@ -18,23 +18,7 @@ const Statistics = ({ categoryData, income, expense }) => {
     percentage: ((amount / expense) * 100).toFixed(2),
   }));
 
-  const chartColors = [
-    "#f87171",
-    "#60a5fa",
-    "#34d399",
-    "#fbbf24",
-    "#a78bfa",
-    "#fb923c",
-    "#4ade80",
-    "#c084fc",
-    "#f472b6",
-    "#818cf8",
-    "#facc15",
-    "#38bdf8",
-    "#f43f5e",
-    "#10b981",
-    "#e879f9",
-  ];
+  const chartColors = ["#5A827E", "#84AE92", "#B9D4AA", "#FAFFCA"];
 
   const data = {
     labels: categories.map((cat) => cat.name),
@@ -51,7 +35,7 @@ const Statistics = ({ categoryData, income, expense }) => {
   };
 
   const options = {
-    cutout: "75%",
+    cutout: "80%",
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -78,7 +62,7 @@ const Statistics = ({ categoryData, income, expense }) => {
         <Doughnut data={data} options={options} />
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <p className="text-base-content/60 font-semibold">Expense</p>
-          <p className="text-xl font-bold text-rose-600">{totalPercentage}%</p>
+          <p className="text-xl font-bold text-white">{totalPercentage}%</p>
         </div>
       </div>
 

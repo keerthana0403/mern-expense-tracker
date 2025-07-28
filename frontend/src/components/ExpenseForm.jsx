@@ -136,7 +136,7 @@ const ExpenseForm = ({ setShowModal, edit }) => {
             </button>
             <button
               type="submit"
-              className="btn btn-primary"
+              className="btn btn-accent"
               onClick={handleSubmit}
               disabled={loading || editLoading}
             >

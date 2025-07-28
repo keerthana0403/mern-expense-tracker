@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import useLogout from "../hooks/useLogout";
+import Button from "./Button";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -15,27 +16,27 @@ const Header = () => {
 
       {/* Center: Navigation */}
       <div className="mx-2">
-        <button
+        <Button
           className="btn btn-sm btn-soft btn-info text-sm"
           onClick={() => navigate("/transactions")}
-        >
-          Transactions
-        </button>
+          children={"Transactions"}
+        />
       </div>
 
       {/* Right: Logout */}
       <div className="flex-none">
-        <button
+        <Button
           className="btn btn-sm btn-error text-white"
           disabled={loading}
           onClick={logout}
-        >
-          {!loading ? (
-            "Logout"
-          ) : (
-            <span className="loading loading-spinner"></span>
-          )}
-        </button>
+          children={
+            !loading ? (
+              "Logout"
+            ) : (
+              <span className="loading loading-spinner"></span>
+            )
+          }
+        />
       </div>
     </div>
   );

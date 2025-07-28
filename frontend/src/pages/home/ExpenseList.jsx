@@ -11,11 +11,13 @@ const ExpenseList = ({ records }) => {
             {/* Income/Expense Label */}
             <div className="w-full mb-2 ">
               <span
-                className={`badge badge-lg ${
-                  record.type === "income"
-                    ? "bg-cyan-950 text-white"
-                    : "bg-amber-300 text-black"
-                }`}
+                className="badge badge-lg "
+                style={{
+                  background: `${
+                    record.type === "income" ? "#2F5249" : "#E3DE61"
+                  }`,
+                  color: `${record.type === "income" ? "#FFFFFF" : "#163020"}`,
+                }}
               >
                 {record.type}
               </span>
@@ -33,7 +35,9 @@ const ExpenseList = ({ records }) => {
 
             {/* Amount & Date */}
             <div className="w-full mb-2 ">
-              <p className="font-semibold text-base-content">{record.amount}</p>
+              <p className="font-semibold text-base-content">
+                {record.amount.toLocaleString("en-IN")}
+              </p>
               <p className="text-xs text-base-content/60">
                 {new Date(record?.date).toLocaleDateString()}
               </p>

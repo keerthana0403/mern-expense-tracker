@@ -27,7 +27,7 @@ const Login = () => {
         </p>
 
         {/* Google Sign-In Button */}
-        <GButton text={"Login with Google"} />
+        <GButton />
 
         {/* Divider */}
         <div className="divider text-sm text-base-content/50">or</div>

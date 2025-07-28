@@ -1,7 +1,10 @@
 import bcrypt from "bcryptjs";
+import { OAuth2Client } from "google-auth-library";
 
 import User from "../models/user.model.js";
 import generateTokenAndSetCookie from "../utils/generateToken.js";
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 export const signup = async (req, res) => {
   try {
@@ -50,6 +53,66 @@ export const signup = async (req, res) => {
     }
   } catch (error) {
     console.log("Error in signup controller", error.message);
+    return res.status(500).json({ error: "Internal Server error" });
+  }
+};
+
+export const googleLogin = async (req, res) => {
+  try {
+    const { token: accessToken } = req.body;
+
+    if (!accessToken) {
+      return res.status(400).json({ error: "Access token missing" });
+    }
+
+    const googleRes = await fetch(
+      "https://www.googleapis.com/oauth2/v3/userinfo",
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    const data = await googleRes.json();
+
+    const {
+      email,
+      given_name: firstName,
+      family_name: lastName,
+      picture: profilePicture,
+    } = data;
+
+    if (!email) {
+      return res.status(400).json({ error: "Invalid Google token" });
+    }
+
+    let user = await User.findOne({ email });
+
+    if (user) {
+      if (user.provider === "local") {
+        return res.status(400).json({
+          error:
+            "Email already registered using password. Please use email login.",
+        });
+      }
+
+      generateTokenAndSetCookie(user._id, res);
+      return res.status(200).json(user);
+    }
+
+    user = await User.create({
+      firstName,
+      lastName,
+      email,
+      profilePicture,
+      provider: "google",
+    });
+
+    generateTokenAndSetCookie(user._id, res);
+    return res.status(201).json(user);
+  } catch (error) {
+    console.log("Error in googleLogin controller", error.message);
     return res.status(500).json({ error: "Internal Server error" });
   }
 };
