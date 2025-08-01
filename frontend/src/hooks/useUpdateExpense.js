@@ -6,7 +6,7 @@ const useUpdateExpense = () => {
   const [loading, setLoading] = useState(false);
   const { updateRecord } = useExpenseRecords();
 
-  const updateExpenseRecord = async (recordId, newRecord) => {
+  const updateExpenseRecord = async (recordId, newRecord, setShowModal) => {
     setLoading(true);
     try {
       const res = await fetch(`/api/expense-record/${recordId}`, {
@@ -18,6 +18,7 @@ const useUpdateExpense = () => {
       if (data.error) throw new Error(data.error);
       updateRecord(data);
       toast.success("Updated successfully");
+      setShowModal(false);
     } catch (error) {
       toast.error(error.message);
     } finally {

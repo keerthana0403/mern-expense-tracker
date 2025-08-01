@@ -1,4 +1,4 @@
-import { Doughnut, Bar } from "react-chartjs-2";
+import { Doughnut } from "react-chartjs-2";
 import { Chart, ArcElement, Tooltip } from "chart.js";
 
 Chart.register(ArcElement, Tooltip);
@@ -35,7 +35,7 @@ const Statistics = ({ categoryData, income, expense }) => {
   };
 
   const options = {
-    cutout: "80%",
+    cutout: "75%",
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -43,7 +43,8 @@ const Statistics = ({ categoryData, income, expense }) => {
         callbacks: {
           label: function (ctx) {
             const amount = ctx.raw;
-            return `${ctx.label}: ₹${amount}`;
+            const label = ctx.label || "";
+            return `${label}: ₹${amount}`;
           },
         },
       },
@@ -60,7 +61,7 @@ const Statistics = ({ categoryData, income, expense }) => {
       {/* Doughnut Chart with Center Text */}
       <div className="relative w-full h-60">
         <Doughnut data={data} options={options} />
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
           <p className="text-base-content/60 font-semibold">Expense</p>
           <p className="text-xl font-bold text-white">{totalPercentage}%</p>
         </div>
@@ -100,52 +101,3 @@ const Statistics = ({ categoryData, income, expense }) => {
 };
 
 export default Statistics;
-
-// const IncomeVsExpensesChart = ({ income, expense }) => {
-//   const data = {
-//     labels: ["Income", "Expenses"],
-//     datasets: [
-//       {
-//         label: "Amount (₹)",
-//         data: [income, expense],
-//         backgroundColor: ["#4caf50", "#f44336"],
-//         borderRadius: 8,
-//       },
-//     ],
-//   };
-//   const options = {
-//     responsive: true,
-//     plugins: {
-//       legend: {
-//         display: false,
-//       },
-//       tooltip: {
-//         callbacks: {
-//           label: function (context) {
-//             return `₹${context.raw}`;
-//           },
-//         },
-//       },
-//     },
-//     scales: {
-//       y: {
-//         beginAtZero: true,
-//         ticks: {
-//           callback: function (value) {
-//             return `₹${value}`;
-//           },
-//         },
-//       },
-//     },
-//   };
-//   return (
-//     <div className="card ">
-//       <div className="card-body">
-//         <h2 className="card-title">📈 Income vs Expenses</h2>
-//         <div className="h-64">
-//           <Bar data={data} options={options} />
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };

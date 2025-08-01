@@ -1,8 +1,8 @@
 import React from "react";
 
-const UserCard = ({ firstName, lastName, email }) => {
+const UserCard = ({ firstName, lastName, email, date }) => {
   return (
-    <div className="bg-base-100 shadow-md rounded-xl p-4 flex items-center space-x-4 max-w-md mx-auto">
+    <div className="p-4 flex flex-col justify-center items-center text-center space-x-4 max-w-md mx-auto">
       <div>
         <img
           src={
@@ -12,11 +12,16 @@ const UserCard = ({ firstName, lastName, email }) => {
           className="w-20 h-20 rounded-full object-cover"
         />
       </div>
-      <div className="text-gray-700">
+      <div className="text-gray-300">
         <p className="text-lg font-semibold">
           {firstName} {lastName}
         </p>
-        <p className="text-sm">{email}</p>
+        <p className="text-md">{email}</p>
+        {date && (
+          <p className="text-sm">
+            Member since {new Date(date).toLocaleDateString()}
+          </p>
+        )}
       </div>
     </div>
   );

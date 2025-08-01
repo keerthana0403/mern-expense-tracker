@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import useAddExpense from "../hooks/useAddExpense.js";
 import useExpenseRecords from "../zustand/useExpenseRecords.js";
 import useUpdateExpense from "../hooks/useUpdateExpense.js";
+import toast from "react-hot-toast";
 
 const ExpenseForm = ({ setShowModal, edit }) => {
   const [inputs, setInputs] = useState({
@@ -29,8 +30,13 @@ const ExpenseForm = ({ setShowModal, edit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (edit) await updateExpenseRecord(recordToUpdate?._id, inputs);
-    else await addExpenseRecord(inputs);
+    if (Number(inputs.amount) > 999999) {
+      toast.error("Amount too large. Please enter a value below ₹10 lakh.");
+      return;
+    }
+    if (edit)
+      await updateExpenseRecord(recordToUpdate?._id, inputs, setShowModal);
+    else await addExpenseRecord(inputs, setShowModal);
   };
 
   useEffect(() => {
@@ -81,6 +87,7 @@ const ExpenseForm = ({ setShowModal, edit }) => {
           <input
             type="number"
             placeholder="Amount"
+            max="999999"
             className="input input-bordered w-full"
             name="amount"
             value={inputs.amount}

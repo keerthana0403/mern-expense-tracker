@@ -2,6 +2,15 @@ import React from "react";
 import Button from "../../components/Button";
 
 const DashBoard = ({ setShowModal, income, expense, balance }) => {
+  const formatAmount = (amount) =>
+    amount >= 10000000
+      ? `₹${(amount / 10000000).toFixed(2)} Cr`
+      : amount >= 100000
+      ? `₹${(amount / 100000).toFixed(2)} Lakh`
+      : amount >= 1000
+      ? `₹${(amount / 1000).toFixed(2)} K`
+      : `₹${amount}`;
+
   return (
     <>
       <div className="flex justify-end p-3 ">
@@ -18,7 +27,7 @@ const DashBoard = ({ setShowModal, income, expense, balance }) => {
         >
           <div className="card-body">
             <h2 className="card-title">💰 Income</h2>
-            <p>₹{income.toLocaleString("en-IN")}</p>
+            <p>{formatAmount(income)}</p>
           </div>
         </div>
         <div
@@ -27,7 +36,7 @@ const DashBoard = ({ setShowModal, income, expense, balance }) => {
         >
           <div className="card-body">
             <h2 className="card-title">💸 Expenses</h2>
-            <p>₹{expense.toLocaleString("en-IN")}</p>
+            <p>{formatAmount(expense)}</p>
           </div>
         </div>
         <div
@@ -36,7 +45,7 @@ const DashBoard = ({ setShowModal, income, expense, balance }) => {
         >
           <div className="card-body">
             <h2 className="card-title">🧾 Balance</h2>
-            <p>₹{balance.toLocaleString("en-IN")}</p>
+            <p>{formatAmount(balance)}</p>
           </div>
         </div>
       </div>

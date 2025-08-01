@@ -7,7 +7,7 @@ const ExpenseFilter = ({ onFilter }) => {
   const [year, setYear] = useState(String(now.getFullYear()));
 
   useEffect(() => {
-    onFilter({ month, year }); // Run filter on mount
+    onFilter({ month, year }); // Run onFilter on mount
   }, []);
 
   const handleFilter = () => {

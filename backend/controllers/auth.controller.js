@@ -1,10 +1,7 @@
 import bcrypt from "bcryptjs";
-import { OAuth2Client } from "google-auth-library";
 
 import User from "../models/user.model.js";
 import generateTokenAndSetCookie from "../utils/generateToken.js";
-
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 export const signup = async (req, res) => {
   try {
@@ -47,6 +44,7 @@ export const signup = async (req, res) => {
         firstName: newUser.firstName,
         lastName: newUser.lastName,
         email: newUser.email,
+        createdAt: newUser.createdAt,
       });
     } else {
       res.status(400).json({ error: "invalid user data" });
@@ -98,7 +96,13 @@ export const googleLogin = async (req, res) => {
       }
 
       generateTokenAndSetCookie(user._id, res);
-      return res.status(200).json(user);
+      return res.status(200).json({
+        _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        createdAt: user.createdAt,
+      });
     }
 
     user = await User.create({
@@ -110,7 +114,13 @@ export const googleLogin = async (req, res) => {
     });
 
     generateTokenAndSetCookie(user._id, res);
-    return res.status(201).json(user);
+    return res.status(201).json({
+      _id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      createdAt: user.createdAt,
+    });
   } catch (error) {
     console.log("Error in googleLogin controller", error.message);
     return res.status(500).json({ error: "Internal Server error" });
@@ -143,6 +153,7 @@ export const login = async (req, res) => {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
+      createdAt: user.createdAt,
     });
   } catch (error) {
     console.log("Error in login controller", error.message);

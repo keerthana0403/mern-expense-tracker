@@ -66,11 +66,11 @@ const Login = () => {
 
           {/* {!isGuest && ( */}
 
-          <Button
+          {/* <Button
             type={"button"}
             className={"btn w-full  bg-yellow-900 hover:bg-yellow-800"}
             children={"Login as Guest"}
-          />
+          /> */}
           {/* )} */}
         </form>
 

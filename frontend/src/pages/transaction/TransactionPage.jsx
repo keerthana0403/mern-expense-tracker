@@ -53,9 +53,11 @@ const TransactionPage = () => {
     setFilteredData(filtered);
   }, [expenses, filters]);
 
+  console.log(authUser);
+
   return (
     <div className="min-h-screen flex justify-center">
-      <div className="w-full max-w-4xl px-4">
+      <div className="">
         <div className="navbar bg-base-100 shadow-md flex gap-5 items-center mb-5 ">
           <button onClick={() => navigate(-1)}>
             <ArrowLeftCircle />
@@ -70,6 +72,7 @@ const TransactionPage = () => {
               firstName={authUser.firstName}
               lastName={authUser.lastName}
               email={authUser.email}
+              date={authUser.createdAt}
             />
           )}
         </div>

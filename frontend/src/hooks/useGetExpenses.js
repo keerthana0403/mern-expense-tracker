@@ -6,22 +6,21 @@ const useGetExpenses = () => {
   const [loading, setLoading] = useState(false);
   const { expenses, setRecords } = useExpenseRecords();
 
-  const getExpenses = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch("/api/expense-record/getAllByUserId");
-      const data = await res.json();
-      if (data.error) throw new Error(data.error);
-      setRecords(data);
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    console.log("getExpensesFn");
+    const getExpenses = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch("/api/expense-record/getAllByUserId");
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+        setRecords(data);
+      } catch (error) {
+        toast.error(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     getExpenses();
   }, []);
 
