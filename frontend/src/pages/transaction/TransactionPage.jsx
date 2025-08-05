@@ -53,8 +53,6 @@ const TransactionPage = () => {
     setFilteredData(filtered);
   }, [expenses, filters]);
 
-  console.log(authUser);
-
   return (
     <div className="min-h-screen flex justify-center">
       <div className="">

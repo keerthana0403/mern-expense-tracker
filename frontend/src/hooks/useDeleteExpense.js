@@ -16,7 +16,6 @@ const useDeleteExpense = () => {
       const data = await res.json();
       if (data.error) throw new Error(data.error);
       deleteRecord(data);
-      console.log(data);
       toast.success("Record deleted");
     } catch (error) {
       toast.error(error.message);

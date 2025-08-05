@@ -8,7 +8,6 @@ const useGLogin = () => {
   const { setAuthUser } = useAuthContext();
 
   const googleLogin = async (tokenResponse) => {
-    console.log(tokenResponse);
     setLoading(true);
     try {
       const res = await fetch("/api/auth/google-login", {
@@ -20,8 +19,6 @@ const useGLogin = () => {
       });
       const data = await res.json();
       if (data.error) throw new Error(data.error);
-
-      console.log(data);
 
       localStorage.setItem("user-info", JSON.stringify(data));
       setAuthUser(data);
