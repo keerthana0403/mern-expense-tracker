@@ -1,8 +1,9 @@
-name: Deploy to EC2
+name: Deploy MERN App
 
 on:
   push:
-    branches: ["main"]
+    branches:
+      - main
 
 jobs:
   deploy:
@@ -12,17 +13,22 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.9.0
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v0.1.9
         with:
-          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
-
-      - name: Deploy code to EC2
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-            cd ~/mern-deploy
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd ~/mern-expense-tracker
             git pull origin main
-            cd backend && pm2 restart all || pm2 start npm -- start
-            cd ../frontend && npm install && npm run build
+            # Backend
+            cd backend
+            npm install
+            pm2 restart all
+            # Frontend
+            cd ../frontend
+            npm install
+            npm run build
+            sudo cp -r dist/* /var/www/html/
             sudo systemctl restart nginx
-          EOF
