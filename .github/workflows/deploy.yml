@@ -13,12 +13,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_SSH_KEY }}" | base64 -d > ~/.ssh/ga-ec2
-          chmod 600 ~/.ssh/ga-ec2
-          eval $(ssh-agent -s)
-          ssh-add ~/.ssh/ga-ec2
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
       - name: Deploy code to EC2
         run: |
