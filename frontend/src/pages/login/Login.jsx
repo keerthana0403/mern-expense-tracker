@@ -4,6 +4,7 @@ import Button from "../../components/Button";
 import { Link } from "react-router-dom";
 import useLogin from "../../hooks/useLogin";
 import GButton from "../../components/GButton";
+import useGuestLogin from "../../hooks/useGuestLogin";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -11,9 +12,15 @@ const Login = () => {
 
   const { loading, login } = useLogin();
 
+  const { loading: guestLoading, guestLogin } = useGuestLogin();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     await login(email, password);
+  };
+
+  const handleGuestLogin = async () => {
+    await guestLogin();
   };
 
   return (
@@ -69,7 +76,14 @@ const Login = () => {
           <Button
             type={"button"}
             className={"btn w-full  bg-yellow-900 hover:bg-yellow-800"}
-            children={"Login as Guest"}
+            children={
+              !guestLoading ? (
+                "Login as Guest"
+              ) : (
+                <span className="loading loading-spinner"></span>
+              )
+            }
+            onClick={handleGuestLogin}
           />
         </form>
 

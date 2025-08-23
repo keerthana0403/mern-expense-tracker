@@ -71,6 +71,7 @@ const TransactionPage = () => {
               lastName={authUser.lastName}
               email={authUser.email}
               date={authUser.createdAt}
+              proPic={authUser.profilePic}
             />
           )}
         </div>

@@ -10,10 +10,23 @@ const useLogout = () => {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/auth/logout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      });
+      const user = JSON.parse(localStorage.getItem("user-info"));
+
+      const res = user?.isGuest
+        ? await fetch("/api/auth/guest-logout", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ userId: user._id }),
+          })
+        : await fetch("/api/auth/logout", {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+          });
+
       const data = await res.json();
       if (data.error) throw new Error(data.error);
       localStorage.removeItem("user-info");

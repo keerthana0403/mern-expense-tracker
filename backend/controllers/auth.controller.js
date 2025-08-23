@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 
 import User from "../models/user.model.js";
 import generateTokenAndSetCookie from "../utils/generateToken.js";
+import Expense from "../models/expense.model.js";
 
 export const signup = async (req, res) => {
   try {
@@ -27,23 +28,27 @@ export const signup = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    const proPic = `https://avatar.iran.liara.run/username?username=${firstName}+${lastName}`;
+
     const newUser = new User({
       firstName,
       lastName,
       email,
       password: hashedPassword,
+      profilePic: proPic,
     });
 
     if (newUser) {
+      await newUser.save();
       // generate JWT Token
       generateTokenAndSetCookie(newUser._id, res);
-      await newUser.save();
 
       return res.status(201).json({
         _id: newUser._id,
         firstName: newUser.firstName,
         lastName: newUser.lastName,
         email: newUser.email,
+        profilePic: newUser.profilePic,
         createdAt: newUser.createdAt,
       });
     } else {
@@ -74,12 +79,7 @@ export const googleLogin = async (req, res) => {
 
     const data = await googleRes.json();
 
-    const {
-      email,
-      given_name: firstName,
-      family_name: lastName,
-      picture: profilePicture,
-    } = data;
+    const { email, given_name: firstName, family_name: lastName } = data;
 
     if (!email) {
       return res.status(400).json({ error: "Invalid Google token" });
@@ -101,15 +101,18 @@ export const googleLogin = async (req, res) => {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
+        profilePic: user.profilePic,
         createdAt: user.createdAt,
       });
     }
+
+    const proPic = `https://avatar.iran.liara.run/username?username=${firstName}+${lastName}`;
 
     user = await User.create({
       firstName,
       lastName,
       email,
-      profilePicture,
+      profilePic: proPic,
       provider: "google",
     });
 
@@ -153,10 +156,47 @@ export const login = async (req, res) => {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
+      profilePic: user.profilePic,
       createdAt: user.createdAt,
     });
   } catch (error) {
     console.log("Error in login controller", error.message);
+    return res.status(500).json({ error: "Internal Server error" });
+  }
+};
+
+export const guestLogin = async (req, res) => {
+  try {
+    const proPic = "https://avatar.iran.liara.run/username?username=Guest+User";
+
+    const newUser = new User({
+      firstName: "Guest",
+      lastName: "User",
+      email: `guest_${Date.now()}@example.com`,
+      password: `guest_${Date.now()}`,
+      profilePic: proPic,
+      isGuest: true,
+    });
+
+    if (newUser) {
+      await newUser.save();
+      // generate JWT Token
+      generateTokenAndSetCookie(newUser._id, res, true);
+
+      return res.status(201).json({
+        _id: newUser._id,
+        firstName: newUser.firstName,
+        lastName: newUser.lastName,
+        email: newUser.email,
+        profilePic: newUser.profilePic,
+        createdAt: newUser.createdAt,
+        isGuest: newUser.isGuest,
+      });
+    } else {
+      res.status(400).json({ error: "invalid user data" });
+    }
+  } catch (error) {
+    console.log("Error in signup controller", error.message);
     return res.status(500).json({ error: "Internal Server error" });
   }
 };
@@ -168,5 +208,29 @@ export const logout = async (req, res) => {
   } catch (error) {
     console.log("Error in logout controller", error.message);
     return res.status(500).json({ error: "Internal Server error" });
+  }
+};
+
+export const guestLogout = async (req, res) => {
+  try {
+    const userId = req.user?._id;
+    if (!userId) {
+      return res.status(400).json({ message: "No userId found in request" });
+    }
+
+    const user = await User.findById(userId);
+
+    if (user && user.isGuest) {
+      await Expense.deleteMany({ userId });
+      await User.deleteOne({ _id: userId });
+
+      res.clearCookie("jwt");
+      return res.json({ message: "Guest account deleted" });
+    }
+
+    return res.status(400).json({ message: "User not found or not a guest" });
+  } catch (error) {
+    console.error("Error in guestLogout:", error);
+    return res.status(500).json({ message: "Guest logout failed" });
   }
 };

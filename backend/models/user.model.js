@@ -18,7 +18,12 @@ const userSchema = new mongoose.Schema(
       type: String,
       minlength: 6,
     },
+    profilePic: {
+      type: String,
+      default: "",
+    },
     provider: { type: String, enum: ["local", "google"], default: "local" },
+    isGuest: { type: Boolean, default: false },
   },
   { timestamps: true } // member since <createdAt>
 );

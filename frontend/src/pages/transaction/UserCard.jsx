@@ -1,15 +1,13 @@
 import React from "react";
 
-const UserCard = ({ firstName, lastName, email, date }) => {
+const UserCard = ({ firstName, lastName, email, date, proPic }) => {
   return (
     <div className="p-4 flex flex-col justify-center items-center text-center space-x-4 max-w-md mx-auto">
       <div>
         <img
-          src={
-            "https://images.pexels.com/photos/3792581/pexels-photo-3792581.jpeg?cs=srgb&dl=pexels-bertellifotografia-3792581.jpg&fm=jpg"
-          }
+          src={proPic}
           alt="User Avatar"
-          className="w-20 h-20 rounded-full object-cover"
+          className="w-20 h-20 rounded-full object-cover mb-5"
         />
       </div>
       <div className="text-gray-300">
