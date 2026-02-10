@@ -27,7 +27,7 @@ const useAddExpense = () => {
         paymentMethod,
         date,
       });
-      const data = await res.json();
+      const data = await res.data;
       if (data.error) throw new Error(data.error);
       addRecord(data);
       toast.success("Transaction added");

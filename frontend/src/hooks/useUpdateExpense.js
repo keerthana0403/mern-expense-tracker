@@ -11,7 +11,7 @@ const useUpdateExpense = () => {
     setLoading(true);
     try {
       const res = await API.put(`/api/expense-record/${recordId}`, newRecord);
-      const data = await res.json();
+      const data = await res.data;
       if (data.error) throw new Error(data.error);
       updateRecord(data);
       toast.success("Updated successfully");

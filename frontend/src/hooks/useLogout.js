@@ -17,7 +17,7 @@ const useLogout = () => {
         ? await API.post("/api/auth/guest-logout", { userId: user._id })
         : await API.post("/api/auth/logout", {});
 
-      const data = await res.json();
+      const data = await res.data;
       if (data.error) throw new Error(data.error);
       localStorage.removeItem("user-info");
       setAuthUser(null);

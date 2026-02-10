@@ -13,7 +13,7 @@ const useGuestLogin = () => {
     try {
       const res = await API.post("/api/auth/guest-login", {});
 
-      const data = await res.json();
+      const data = await res.data;
       if (data.error) throw new Error(data.error);
 
       localStorage.setItem("user-info", JSON.stringify(data));

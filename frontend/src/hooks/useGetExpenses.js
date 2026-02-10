@@ -12,7 +12,7 @@ const useGetExpenses = () => {
       setLoading(true);
       try {
         const res = await API.get("/api/expense-record/getAllByUserId");
-        const data = await res.json();
+        const data = await res.data;
         if (data.error) throw new Error(data.error);
         setRecords(data);
       } catch (error) {

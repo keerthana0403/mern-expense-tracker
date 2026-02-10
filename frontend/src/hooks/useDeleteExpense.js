@@ -12,7 +12,7 @@ const useDeleteExpense = () => {
 
     try {
       const res = await API.delete(`/api/expense-record/${recordId}`);
-      const data = await res.json();
+      const data = await res.data;
       if (data.error) throw new Error(data.error);
       deleteRecord(data);
       toast.success("Record deleted");
