@@ -9,8 +9,6 @@ import { AuthProvider } from "./context/AuthContext.jsx";
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
-console.log("Backend url", import.meta.env.VITE_API_BASE_URL);
-
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>

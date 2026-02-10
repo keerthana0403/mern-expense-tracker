@@ -35,7 +35,7 @@ const ExpenseFilter = ({ onFilter }) => {
         className="select select-bordered w-1/3"
       >
         <option value="">Select Year</option>
-        {["2023", "2024", "2025"].map((yr) => (
+        {["2023", "2024", "2025", "2026"].map((yr) => (
           <option key={yr} value={yr}>
             {yr}
           </option>

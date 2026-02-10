@@ -17,7 +17,7 @@ const useDeleteExpense = () => {
       deleteRecord(data);
       toast.success("Record deleted");
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response?.data?.error || "Something went wrong");
     } finally {
       setLoading(false);
     }
