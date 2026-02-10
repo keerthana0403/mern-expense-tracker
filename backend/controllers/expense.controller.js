@@ -2,6 +2,9 @@ import Expense from "../models/expense.model.js";
 
 export const fetchRecords = async (req, res) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
     const userId = req.user._id;
 
     const userRecords = await Expense.find({ userId }).sort({ createdAt: -1 });
@@ -18,6 +21,9 @@ export const fetchRecords = async (req, res) => {
 
 export const addRecord = async (req, res) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
     const userId = req.user._id;
 
     const { title, amount, type, category, date, paymentMethod } = req.body;
@@ -43,6 +49,9 @@ export const addRecord = async (req, res) => {
 
 export const updateRecord = async (req, res) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
     const userId = req.user._id;
     const { recordId } = req.params;
     const updatedData = req.body;
@@ -59,7 +68,7 @@ export const updateRecord = async (req, res) => {
           date: updatedData.date,
         },
       },
-      { new: true }
+      { new: true },
     );
 
     if (!userRecord) {
@@ -75,6 +84,9 @@ export const updateRecord = async (req, res) => {
 
 export const deleteRecord = async (req, res) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
     const userId = req.user._id;
     const { recordId } = req.params;
 
