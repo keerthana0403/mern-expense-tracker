@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import useExpenseRecords from "../zustand/useExpenseRecords";
+import API from "../api/api";
 
 const useGetExpenses = () => {
   const [loading, setLoading] = useState(false);
@@ -10,7 +11,7 @@ const useGetExpenses = () => {
     const getExpenses = async () => {
       setLoading(true);
       try {
-        const res = await fetch("/api/expense-record/getAllByUserId");
+        const res = await API.get("/api/expense-record/getAllByUserId");
         const data = await res.json();
         if (data.error) throw new Error(data.error);
         setRecords(data);

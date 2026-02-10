@@ -1,6 +1,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useAuthContext } from "../context/AuthContext";
+import API from "../api/api";
 
 const useLogout = () => {
   const [loading, setLoading] = useState(false);
@@ -13,19 +14,8 @@ const useLogout = () => {
       const user = JSON.parse(localStorage.getItem("user-info"));
 
       const res = user?.isGuest
-        ? await fetch("/api/auth/guest-logout", {
-            method: "POST",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ userId: user._id }),
-          })
-        : await fetch("/api/auth/logout", {
-            method: "POST",
-            credentials: "include",
-            headers: { "Content-Type": "application/json" },
-          });
+        ? await API.post("/api/auth/guest-logout", { userId: user._id })
+        : await API.post("/api/auth/logout", {});
 
       const data = await res.json();
       if (data.error) throw new Error(data.error);

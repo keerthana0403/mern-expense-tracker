@@ -1,6 +1,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useAuthContext } from "../context/AuthContext";
+import API from "../api/api";
 
 const useGuestLogin = () => {
   const [loading, setLoading] = useState(false);
@@ -10,12 +11,7 @@ const useGuestLogin = () => {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/auth/guest-login", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({}),
-      });
+      const res = await API.post("/api/auth/guest-login", {});
 
       const data = await res.json();
       if (data.error) throw new Error(data.error);

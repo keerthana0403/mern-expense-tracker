@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useAuthContext } from "../context/AuthContext";
+import API from "../api/api";
 
 const useGLogin = () => {
   const [loading, setLoading] = useState(false);
@@ -10,12 +11,8 @@ const useGLogin = () => {
   const googleLogin = async (tokenResponse) => {
     setLoading(true);
     try {
-      const res = await fetch("/api/auth/google-login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          token: tokenResponse.access_token,
-        }),
+      const res = await API.post("/api/auth/google-login", {
+        token: tokenResponse.access_token,
       });
       const data = await res.json();
       if (data.error) throw new Error(data.error);

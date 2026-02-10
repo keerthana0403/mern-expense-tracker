@@ -1,6 +1,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import useExpenseRecords from "../zustand/useExpenseRecords";
+import API from "../api/api";
 
 const useDeleteExpense = () => {
   const [loading, setLoading] = useState(false);
@@ -10,9 +11,7 @@ const useDeleteExpense = () => {
     setLoading(true);
 
     try {
-      const res = await fetch(`/api/expense-record/${recordId}`, {
-        method: "DELETE",
-      });
+      const res = await API.delete(`/api/expense-record/${recordId}`);
       const data = await res.json();
       if (data.error) throw new Error(data.error);
       deleteRecord(data);

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import useExpenseRecords from "../zustand/useExpenseRecords";
 import toast from "react-hot-toast";
+import API from "../api/api";
 
 const useUpdateExpense = () => {
   const [loading, setLoading] = useState(false);
@@ -9,11 +10,7 @@ const useUpdateExpense = () => {
   const updateExpenseRecord = async (recordId, newRecord, setShowModal) => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/expense-record/${recordId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newRecord),
-      });
+      const res = await API.put(`/api/expense-record/${recordId}`, newRecord);
       const data = await res.json();
       if (data.error) throw new Error(data.error);
       updateRecord(data);
