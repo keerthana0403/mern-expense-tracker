@@ -2,7 +2,7 @@
 
 A full-stack **MERN Expense Tracker** built using **React.js, Node.js, Express.js, and MongoDB** that helps users efficiently manage their personal finances. The application allows users to securely track income and expenses, visualize spending patterns through charts, and manage transactions with an intuitive and responsive interface.
 
-![Expense Tracker Homepage](public/homepage.png)
+![Expense Tracker Homepage](./frontend/public/homepage.png)
 
 ---
 
