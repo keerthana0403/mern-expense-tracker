@@ -85,32 +85,34 @@ const Home = () => {
   }, [expenses]);
 
   return (
-    <div className="min-h-screen flex justify-center ">
-      <div className="">
-        <Header />
+<div className="min-h-screen flex justify-center">
+  <div>
+    <Header />
 
-        <DashBoard
-          setShowModal={setShowModal}
-          income={totalIncome}
-          expense={totalExpenses}
-          balance={balance}
-        />
+    <DashBoard
+      setShowModal={setShowModal}
+      income={totalIncome}
+      expense={totalExpenses}
+      balance={balance}
+    />
 
-        {expenses.length !== 0 && <ExpenseFilter onFilter={handleFilter} />}
+    {loading ? (
+      <div className="flex justify-center py-10">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    ) : (
+      <>
+        {expenses.length !== 0 && (
+          <ExpenseFilter onFilter={handleFilter} />
+        )}
 
-        {loading ? (
-          <span className="loading loading-spinner"></span>
-        ) : expenses.length === 0 ? (
-          // Case 1: No transactions at all
+        {expenses.length === 0 ? (
           <TextContent setShowModal={setShowModal} />
         ) : filteredExpenses.length === 0 ? (
-          // Case 3: Filtered month has no expenses
           <MonthlyRecord />
         ) : totalExpenses === 0 ? (
-          // Case 2: Only income exists
           <MonthlyIncome totalIncome={totalIncome} />
         ) : (
-          // Case 4: Show stats
           <Statistics
             categoryData={categoryData}
             income={totalIncome}
@@ -118,15 +120,17 @@ const Home = () => {
           />
         )}
 
-        {loading ? (
-          <span className="loading loading-spinner"></span>
-        ) : expenses.length === 0 ? null : (
+        {expenses.length !== 0 && (
           <ExpenseList records={expenses.slice(0, 3)} />
         )}
+      </>
+    )}
 
-        {showModal && <ExpenseForm setShowModal={setShowModal} edit={false} />}
-      </div>
-    </div>
+    {showModal && (
+      <ExpenseForm setShowModal={setShowModal} edit={false} />
+    )}
+  </div>
+</div>
   );
 };
 
